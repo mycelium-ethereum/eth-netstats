@@ -1,0 +1,44 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: eth-netstats-frontend
+  labels:
+    run: eth-netstats-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: eth-netstats-frontend
+  template:
+    metadata:
+      labels:
+        run: eth-netstats-frontend
+    spec:
+      containers:
+      - name: eth-netstats-frontend
+        image: gcr.io/vigeo-255803/eth-netstat:latest
+        args: [
+        ]
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 3000
+          protocol: TCP
+...
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eth-netstats-frontend
+  labels:
+    run: eth-netstats-frontend
+spec:
+  ports:
+  - name: default
+    port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    run: eth-netstats-frontend
+  type: LoadBalancer
+...
